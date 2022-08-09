@@ -123,6 +123,14 @@ class OcspBasicResponse
         return null;
     }
 
+    public function getCertID(): array
+    {
+        $certStatusResponse = $this->getResponses()[0];
+        // Translate algorithm name to OID for correct equality check
+        $certStatusResponse['certID']['hashAlgorithm']['algorithm'] = ASN1::getOID($certStatusResponse['certID']['hashAlgorithm']['algorithm']);
+        return $certStatusResponse['certID'];
+    }
+
     public function getEncodedResponseData(): string
     {
         return ASN1::encodeDER($this->ocspBasicResponse['tbsResponseData'],  OcspBasicResponseMap::MAP['children']['tbsResponseData']);

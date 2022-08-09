@@ -105,10 +105,11 @@ if ($info["content_type"] != Ocsp::OCSP_RESPONSE_MEDIATYPE) {
 // Decode the raw response from the OCSP Responder
 $response = new OcspResponse($result);
 
-// Verify response
-// It will verify that OCSP response contains only one response,
-// validates certificateId and signature
-$response->verify($certificateId);
+// Validate response certificateId
+$response->validateCertificateId($certificateId);
+
+// Validate response signature
+$response->validateSignature();
 
 // Validate nonce when the nonce feature is enabled,
 $basicResponse = $response->getBasicResponse();
@@ -141,6 +142,7 @@ Following methods can be called with `$basicResponse`:
 * `$basicResponse->getNextUpdate()` - returns DateTime object (is `null` when `nextUpdate` field does not exist)
 * `$basicResponse->getSignatureAlgorithm()` - returns signature algorithm as string (throws exception, when signature algorithm is not implemented)
 * `$basicResponse->getNonceExtension()` - returns nonce (when value is `null` then nonce extension does not exist in response)
+* `$basicResponse->getCertID()` - returns response certificateID
 
 # Exceptions
 

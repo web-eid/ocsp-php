@@ -67,7 +67,8 @@ class OcspResponseTest extends TestCase
         $mockCertificateID = $basicResponse->getResponses()[0]['certID'];
         $mockCertificateID['hashAlgorithm']['algorithm'] = ASN1::getOID('id-sha1');
 
-        $response->verify($mockCertificateID);
+        $response->validateCertificateId($mockCertificateID);
+        $response->validateSignature();
 
         $this->assertFalse($response->isRevoked());
         $this->assertEquals("successful", $response->getStatus());
@@ -102,7 +103,7 @@ class OcspResponseTest extends TestCase
         $this->expectException(OcspVerifyFailedException::class);
         $this->expectExceptionMessage("OCSP response must contain one response, received 2 responses instead");
 
-        $response->verify($mockCertificateID);
+        $response->isRevoked();
     }
 
     public function testWhenCertificateIdsDoNotMatchThenThrows(): void
@@ -117,7 +118,7 @@ class OcspResponseTest extends TestCase
         $this->expectException(OcspVerifyFailedException::class);
         $this->expectExceptionMessage("OCSP responded with certificate ID that differs from the requested ID");
 
-        $response->verify($mockCertificateID);
+        $response->validateCertificateId($mockCertificateID);
     }
 
     public function testWhenResponseTypeNotBasicResponseThrows(): void
@@ -175,7 +176,7 @@ class OcspResponseTest extends TestCase
 
         $property->setValue($response, $mockResponse);
 
-        $response->verify($mockCertificateID);
+        $response->isRevoked();
     }
 
     public function testWhenResponseSignatureIsNotValidThrows(): void
@@ -197,7 +198,7 @@ class OcspResponseTest extends TestCase
 
         $property->setValue($response, $mockResponse);
 
-        $response->verify($mockCertificateID);
+        $response->validateSignature();
     }
 
     public function testWhenSignatureAlgorithmIsSha3(): void
