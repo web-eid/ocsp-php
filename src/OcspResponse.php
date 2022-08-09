@@ -27,7 +27,6 @@ declare(strict_types=1);
 namespace web_eid\ocsp_php;
 
 use phpseclib3\File\ASN1;
-use phpseclib3\File\X509;
 use UnexpectedValueException;
 use web_eid\ocsp_php\exceptions\OcspResponseDecodeException;
 use web_eid\ocsp_php\exceptions\OcspVerifyFailedException;
@@ -54,6 +53,11 @@ class OcspResponse
             })            
         );
 
+    }
+
+    public function getResponse(): array
+    {
+        return $this->ocspResponse;
     }
 
     public function getBasicResponse(): OcspBasicResponse

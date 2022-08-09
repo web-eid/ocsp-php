@@ -144,6 +144,8 @@ Following methods can be called with `$basicResponse`:
 * `$basicResponse->getNonceExtension()` - returns nonce (when value is `null` then nonce extension does not exist in response)
 * `$basicResponse->getCertID()` - returns response certificateID
 
+To get the full response for debugging or logging purposes, use `$response->getResponse()`
+
 # Exceptions
 
 All exceptions are handled by the `web_eid\ocsp_php\exceptions\OcspException` class. To catch these errors, you can enclose your code within try/catch statements:
