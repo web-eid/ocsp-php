@@ -82,6 +82,8 @@ class OcspResponse
     public function isRevoked()
     {
         $basicResponse = $this->getBasicResponse();
+        $this->validateResponse($basicResponse);
+
         if (isset($basicResponse->getResponses()[0]['certStatus']['good'])) {
             return false;
         }
@@ -96,11 +98,15 @@ class OcspResponse
         return null;
     }
 
-    private function validateResponseSignature(OcspBasicResponse $basicResponse, X509 $certificate)
-    {
-        // get public key from responder certificate in order to verify signature on response
-        $publicKey = $certificate->getPublicKey()->withHash($basicResponse->getSignatureAlgorithm());
 
+    public function validateSignature(): void
+    {
+        $basicResponse = $this->getBasicResponse();
+        $this->validateResponse($basicResponse);
+
+        $responderCert = $basicResponse->getCertificates()[0];
+        // get public key from responder certificate in order to verify signature on response
+        $publicKey = $responderCert->getPublicKey()->withHash($basicResponse->getSignatureAlgorithm());
         // verify response data
         $encodedTbsResponseData = $basicResponse->getEncodedResponseData();
         $signature = $basicResponse->getSignature();
@@ -110,24 +116,21 @@ class OcspResponse
         }
 
     }
-    
-    public function verify(array $requestCertificateId)
+
+    public function validateCertificateId(array $requestCertificateId): void
     {
-
         $basicResponse = $this->getBasicResponse();
+        if ($requestCertificateId != $basicResponse->getCertID()) {
+            throw new OcspVerifyFailedException("OCSP responded with certificate ID that differs from the requested ID");
+        }
 
+    }
+
+    private function validateResponse(OcspBasicResponse $basicResponse): void
+    {
         // Must be one response
         if (count($basicResponse->getResponses()) != 1) {
             throw new OcspVerifyFailedException("OCSP response must contain one response, received " . count($basicResponse->getResponses()) . " responses instead");
-        }
-
-        $certStatusResponse = $basicResponse->getResponses()[0];
-
-        // Translate algorithm name to OID for correct equality check
-        $certStatusResponse['certID']['hashAlgorithm']['algorithm'] = ASN1::getOID($certStatusResponse['certID']['hashAlgorithm']['algorithm']);
-
-        if ($requestCertificateId != $certStatusResponse['certID']) {
-            throw new OcspVerifyFailedException("OCSP responded with certificate ID that differs from the requested ID");
         }
 
         // At least on cert must exist in responder
@@ -135,12 +138,6 @@ class OcspResponse
             throw new OcspVerifyFailedException("OCSP response must contain the responder certificate, but non was provided");
         }
 
-        // Validate responder certificate signature
-        $responderCert = $basicResponse->getCertificates()[0];
-        $this->validateResponseSignature($basicResponse, $responderCert);
-
     }
-
-
 
 }
