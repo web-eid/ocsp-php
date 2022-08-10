@@ -82,7 +82,7 @@ $requestBody->addCertificateId($certificateId);
 
 // Add nonce extension when the nonce feature is enabled,
 // otherwise skip this line
-$requestBody->addNonceExtension(random_bytes(32));
+$requestBody->addNonceExtension(random_bytes(8));
 
 // Send request to OCSP responder URL
 $curl = curl_init();
