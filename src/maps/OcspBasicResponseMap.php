@@ -55,7 +55,8 @@ abstract class OcspBasicResponseMap
                         'children' => [
                             'byName' => [
                                 'constant' => 1,
-                                'explicit' => true, ] + Name::MAP,
+                                'explicit' => true,
+                            ] + Name::MAP,
                             'byKey' => [
                                 'constant' => 2,
                                 'explicit' => true,
@@ -100,7 +101,7 @@ abstract class OcspBasicResponseMap
                                                     'constant' => 0,
                                                     'explicit' => true,
                                                     'optional' => true,
-                                                 ] + CRLReason::MAP,
+                                                ] + CRLReason::MAP,
                                             ],
                                         ],
                                         'unknown' => [
@@ -144,5 +145,5 @@ abstract class OcspBasicResponseMap
                 'children' => Certificate::MAP,
             ],
         ],
-    ];    
+    ];
 }

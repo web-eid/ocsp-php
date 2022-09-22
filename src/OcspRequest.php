@@ -45,8 +45,7 @@ class OcspRequest
                 'requestList' => [],
                 'requestExtensions' => [],
             ],
-        ];        
-
+        ];
     }
 
     public function addCertificateId(array $certificateId): void
@@ -54,7 +53,7 @@ class OcspRequest
         $request = [
             'reqCert' => $certificateId
         ];
-        $this->ocspRequest['tbsRequest']['requestList'][] = $request;        
+        $this->ocspRequest['tbsRequest']['requestList'][] = $request;
     }
 
     public function addNonceExtension(string $nonce): void
@@ -66,7 +65,7 @@ class OcspRequest
         ];
         $this->ocspRequest['tbsRequest']['requestExtensions'][] = $nonceExtension;
     }
-    
+
     public function getNonceExtension(): string
     {
         return current(
@@ -82,7 +81,5 @@ class OcspRequest
     public function getEncodeDer(): string
     {
         return ASN1::encodeDER($this->ocspRequest, OcspRequestMap::MAP);
-    }    
-
-
+    }
 }

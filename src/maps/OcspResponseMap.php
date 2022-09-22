@@ -56,5 +56,4 @@ abstract class OcspResponseMap
             ],
         ],
     ];
-
 }

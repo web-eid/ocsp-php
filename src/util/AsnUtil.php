@@ -57,5 +57,4 @@ class AsnUtil
         // Remove first byte
         return pack('c*', ...array_slice(unpack('c*', $subjectPublicKey), 1));
     }
-
 }

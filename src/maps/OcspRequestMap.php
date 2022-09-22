@@ -107,5 +107,4 @@ abstract class OcspRequestMap
             ],
         ],
     ];
-
 }

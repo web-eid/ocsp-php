@@ -49,7 +49,7 @@ class OcspResponseTest extends TestCase
     // and https://gist.github.com/mrts/bb0dcf93a2b9d2458eab1f9642ee97b2.    
     private static function getOcspResponseBytesFromResources(string $resource = 'ocsp_response.der'): string
     {
-        return file_get_contents(__DIR__.'/_resources/'.$resource);
+        return file_get_contents(__DIR__ . '/_resources/' . $resource);
     }
 
     public function testWhenResponseDecodeFailsThenThrows(): void
@@ -76,7 +76,6 @@ class OcspResponseTest extends TestCase
         $this->assertEquals("2021-09-17 18:25:24", $basicResponse->getThisUpdate()->format("Y-m-d H:i:s"));
         $this->assertNull($basicResponse->getNextUpdate());
         $this->assertEquals([71, 255, 175, 201, 24, 17, 119, 14], array_values(unpack('C*', $basicResponse->getNonceExtension())));
-
     }
 
     public function testWhenCertificateIsRevoked(): void
@@ -96,7 +95,7 @@ class OcspResponseTest extends TestCase
     {
         $response = new OcspResponse(self::getOcspResponseBytesFromResources("ocsp_response_with_2_responses.der"));
         $basicResponse = $response->getBasicResponse();
-        
+
         $mockCertificateID = $basicResponse->getResponses()[0]['certID'];
         $mockCertificateID['hashAlgorithm']['algorithm'] = ASN1::getOID('id-sha1');
 
@@ -110,7 +109,7 @@ class OcspResponseTest extends TestCase
     {
         $response = new OcspResponse(self::getOcspResponseBytesFromResources());
         $basicResponse = $response->getBasicResponse();
-        
+
         $mockCertificateID = $basicResponse->getResponses()[0]['certID'];
         $mockCertificateID['issuerNameHash'] = "1234";
         $mockCertificateID['hashAlgorithm']['algorithm'] = ASN1::getOID('id-sha1');
@@ -137,7 +136,6 @@ class OcspResponseTest extends TestCase
         $property->setValue($response, $mockResponse);
 
         $response->getBasicResponse();
-
     }
 
     public function testWhenMissingResponseThrows(): void
@@ -215,7 +213,6 @@ class OcspResponseTest extends TestCase
         $basicResponse = $response->getBasicResponse();
 
         $this->assertEquals("sha3-256", $basicResponse->getSignatureAlgorithm());
-
     }
 
     public function testWhenSignatureAlgorithmIsNotSupportedThenThrows(): void
@@ -235,7 +232,6 @@ class OcspResponseTest extends TestCase
 
         $basicResponse = $response->getBasicResponse();
         $basicResponse->getSignatureAlgorithm();
-
     }
 
     public function testWhenNextUpdateInResponse(): void
@@ -253,8 +249,6 @@ class OcspResponseTest extends TestCase
         $basicResponse = $response->getBasicResponse();
 
         $this->assertEquals(new DateTime("Fri, 17 Sep 2021 18:25:24 +0000"), $basicResponse->getNextUpdate());
-
-
     }
 
     public function testWhenNonceExtensionDoesNotExistNullShouldReturned(): void
@@ -272,8 +266,5 @@ class OcspResponseTest extends TestCase
         $basicResponse = $response->getBasicResponse();
 
         $this->assertNull($basicResponse->getNonceExtension());
-
-
     }
-
 }

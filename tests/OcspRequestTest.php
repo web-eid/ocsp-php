@@ -79,7 +79,6 @@ class OcspRequestTest extends TestCase
         $property->setAccessible(true);
 
         $this->assertEquals($this->getExpectedRequestWithCertID(), $property->getValue($request));
-
     }
 
     public function testWhenAddNonceExtensionSuccess(): void
@@ -92,7 +91,6 @@ class OcspRequestTest extends TestCase
         $property->setAccessible(true);
 
         $this->assertEquals($this->getExpectedWithNonce(), $property->getValue($request));
-
     }
 
     public function testWhenGetNonceExtensionSuccess(): void
@@ -101,7 +99,5 @@ class OcspRequestTest extends TestCase
         $request->addNonceExtension("nonce");
 
         $this->assertEquals("nonce", $request->getNonceExtension());
-
     }
-
 }

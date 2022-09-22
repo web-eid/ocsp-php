@@ -52,14 +52,14 @@ class OcspBasicResponse
     {
         $certificatesArr = [];
         if (isset($this->ocspBasicResponse['certs'])) {
-            foreach($this->ocspBasicResponse['certs'] as $cert) {
+            foreach ($this->ocspBasicResponse['certs'] as $cert) {
                 $x509 = new X509();
-				/*
+                /*
 				We need to DER encode each responder certificate array as there exists some
 				more loading in X509->loadX509 method, which is not executed when loading just basic array.
 				For example without this the publicKey would not be in PEM format and X509->getPublicKey()
 				will throw error. It also maps out the extensions from BIT STRING
-				*/                
+				*/
                 $x509->loadX509(ASN1::encodeDER($cert, Certificate::MAP));
                 $certificatesArr[] = $x509;
             }
@@ -103,7 +103,7 @@ class OcspBasicResponse
         if (false !== ($pos = strpos($algorithm, 'sha'))) {
             return substr($algorithm, $pos, 6);
         }
-        
+
         throw new OcspCertificateException("Signature algorithm " . $algorithm . " not implemented");
     }
 
@@ -135,5 +135,4 @@ class OcspBasicResponse
     {
         return ASN1::encodeDER($this->ocspBasicResponse['tbsResponseData'],  OcspBasicResponseMap::MAP['children']['tbsResponseData']);
     }
-
 }

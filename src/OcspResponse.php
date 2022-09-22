@@ -50,9 +50,8 @@ class OcspResponse
             OcspResponseMap::MAP,
             array('response' => function ($encoded) {
                 return ASN1::asn1map(ASN1::decodeBER($encoded)[0], OcspBasicResponseMap::MAP);
-            })            
+            })
         );
-
     }
 
     public function getResponse(): array
@@ -82,7 +81,7 @@ class OcspResponse
     {
         return $this->revokeReason;
     }
-    
+
     public function isRevoked()
     {
         $basicResponse = $this->getBasicResponse();
@@ -118,7 +117,6 @@ class OcspResponse
         if (!$publicKey->verify($encodedTbsResponseData, $signature)) {
             throw new OcspVerifyFailedException("OCSP response signature is not valid");
         }
-
     }
 
     public function validateCertificateId(array $requestCertificateId): void
@@ -127,7 +125,6 @@ class OcspResponse
         if ($requestCertificateId != $basicResponse->getCertID()) {
             throw new OcspVerifyFailedException("OCSP responded with certificate ID that differs from the requested ID");
         }
-
     }
 
     private function validateResponse(OcspBasicResponse $basicResponse): void
@@ -141,7 +138,5 @@ class OcspResponse
         if (count($basicResponse->getCertificates()) < 1) {
             throw new OcspVerifyFailedException("OCSP response must contain the responder certificate, but non was provided");
         }
-
     }
-
 }
