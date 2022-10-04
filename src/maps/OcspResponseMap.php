@@ -28,6 +28,10 @@ namespace web_eid\ocsp_php\maps;
 
 use phpseclib3\File\ASN1;
 
+/**
+ * The map has been created with help from Petr Muzikant project:
+ * https://github.com/Muzosh/web-eid-authtoken-validation-php
+ */
 abstract class OcspResponseMap
 {
     public const MAP = [

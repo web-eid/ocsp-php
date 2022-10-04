@@ -34,6 +34,10 @@ use phpseclib3\File\ASN1\Maps\CRLReason;
 use phpseclib3\File\ASN1\Maps\Extensions;
 use phpseclib3\File\ASN1\Maps\Name;
 
+/**
+ * The map has been created with help from Petr Muzikant project:
+ * https://github.com/Muzosh/web-eid-authtoken-validation-php
+ */
 abstract class OcspBasicResponseMap
 {
     public const MAP = [
