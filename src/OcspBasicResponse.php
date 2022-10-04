@@ -48,6 +48,9 @@ class OcspBasicResponse
         return $this->ocspBasicResponse['tbsResponseData']['responses'];
     }
 
+    /**
+     * @copyright 2022 Petr Muzikant pmuzikant@email.cz
+     */
     public function getCertificates(): array
     {
         $certificatesArr = [];
@@ -93,6 +96,9 @@ class OcspBasicResponse
         return null;
     }
 
+    /**
+     * @copyright 2022 Petr Muzikant pmuzikant@email.cz
+     */
     public function getSignatureAlgorithm(): string
     {
         $algorithm = strtolower($this->ocspBasicResponse['signatureAlgorithm']['algorithm']);

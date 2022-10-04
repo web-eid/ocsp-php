@@ -66,6 +66,9 @@ class OcspRequest
         $this->ocspRequest['tbsRequest']['requestExtensions'][] = $nonceExtension;
     }
 
+    /**
+     * @copyright 2022 Petr Muzikant pmuzikant@email.cz
+     */
     public function getNonceExtension(): string
     {
         return current(

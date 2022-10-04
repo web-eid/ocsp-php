@@ -33,6 +33,10 @@ use phpseclib3\File\ASN1\Maps\CertificateSerialNumber;
 use phpseclib3\File\ASN1\Maps\Extensions;
 use phpseclib3\File\ASN1\Maps\GeneralName;
 
+/**
+ * The map has been created with help from Petr Muzikant project:
+ * https://github.com/Muzosh/web-eid-authtoken-validation-php
+ */
 abstract class OcspRequestMap
 {
 
