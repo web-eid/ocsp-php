@@ -33,7 +33,6 @@ use Exception;
  */
 abstract class OcspException extends Exception
 {
-
     /**
      * @param string $message — [optional] The Exception message to throw
      */

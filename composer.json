@@ -6,23 +6,32 @@
     "authors": [
         {
             "name": "Guido Gröön",
-            "role" : "developer"
+            "role": "developer"
         }
     ],
     "require-dev": {
-		"phpunit/phpunit": "^9.5"
-	},    
+        "phpunit/phpunit": "^9.5"
+    },
     "autoload": {
         "psr-4": {
-            "web_eid\\ocsp_php\\": ["src"]
+            "web_eid\\ocsp_php\\": [
+                "src"
+            ]
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "web_eid\\ocsp_php\\": ["tests"]
+            "web_eid\\ocsp_php\\": [
+                "tests"
+            ]
         }
     },
     "require": {
         "phpseclib/phpseclib": "3.0.14"
+    },
+    "scripts": {
+        "fix-php": [
+            "prettier src/**/* --write", "prettier src/* --write"
+        ]
     }
 }

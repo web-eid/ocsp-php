@@ -157,3 +157,24 @@ try {
     // exception handler
 }
 ```
+
+# Code formatting
+
+We are using `Prettier` for code formatting. To install Prettier, use following command:
+
+```
+npm install --global prettier @prettier/plugin-php
+```
+Run command for code formatting:
+```
+composer fix-php
+```
+
+# Testing
+
+Run phpunit in the root directory to run all unit tests.
+
+```
+./vendor/bin/phpunit tests
+```
+

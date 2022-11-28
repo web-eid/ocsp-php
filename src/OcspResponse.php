@@ -45,13 +45,14 @@ class OcspResponse
             throw new OcspResponseDecodeException();
         }
 
-        $this->ocspResponse = ASN1::asn1map(
-            $decoded[0],
-            OcspResponseMap::MAP,
-            array('response' => function ($encoded) {
-                return ASN1::asn1map(ASN1::decodeBER($encoded)[0], OcspBasicResponseMap::MAP);
-            })
-        );
+        $this->ocspResponse = ASN1::asn1map($decoded[0], OcspResponseMap::MAP, [
+            "response" => function ($encoded) {
+                return ASN1::asn1map(
+                    ASN1::decodeBER($encoded)[0],
+                    OcspBasicResponseMap::MAP
+                );
+            },
+        ]);
     }
 
     public function getResponse(): array
@@ -61,20 +62,30 @@ class OcspResponse
 
     public function getBasicResponse(): OcspBasicResponse
     {
-        if (Ocsp::ID_PKIX_OCSP_BASIC_STRING != $this->ocspResponse['responseBytes']['responseType']) {
-            throw new UnexpectedValueException('responseType is not "id-pkix-ocsp-basic" but is ' . $this->ocspResponse['responseBytes']['responseType']);
+        if (
+            Ocsp::ID_PKIX_OCSP_BASIC_STRING !=
+            $this->ocspResponse["responseBytes"]["responseType"]
+        ) {
+            throw new UnexpectedValueException(
+                'responseType is not "id-pkix-ocsp-basic" but is ' .
+                    $this->ocspResponse["responseBytes"]["responseType"]
+            );
         }
 
-        if (!$this->ocspResponse['responseBytes']['response']) {
-            throw new UnexpectedValueException('Could not decode OcspResponse->responseBytes->responseType');
+        if (!$this->ocspResponse["responseBytes"]["response"]) {
+            throw new UnexpectedValueException(
+                "Could not decode OcspResponse->responseBytes->responseType"
+            );
         }
 
-        return new OcspBasicResponse($this->ocspResponse['responseBytes']['response']);
+        return new OcspBasicResponse(
+            $this->ocspResponse["responseBytes"]["response"]
+        );
     }
 
     public function getStatus(): string
     {
-        return $this->ocspResponse['responseStatus'];
+        return $this->ocspResponse["responseStatus"];
     }
 
     public function getRevokeReason(): string
@@ -87,20 +98,21 @@ class OcspResponse
         $basicResponse = $this->getBasicResponse();
         $this->validateResponse($basicResponse);
 
-        if (isset($basicResponse->getResponses()[0]['certStatus']['good'])) {
+        if (isset($basicResponse->getResponses()[0]["certStatus"]["good"])) {
             return false;
         }
-        if (isset($basicResponse->getResponses()[0]['certStatus']['revoked'])) {
-            $revokedStatus = $basicResponse->getResponses()[0]['certStatus']['revoked'];
+        if (isset($basicResponse->getResponses()[0]["certStatus"]["revoked"])) {
+            $revokedStatus = $basicResponse->getResponses()[0]["certStatus"][
+                "revoked"
+            ];
             // Check revoke reason
-            if (isset($revokedStatus['revokedReason'])) {
-                $this->revokeReason = $revokedStatus['revokedReason'];
+            if (isset($revokedStatus["revokedReason"])) {
+                $this->revokeReason = $revokedStatus["revokedReason"];
             }
             return true;
         }
         return null;
     }
-
 
     public function validateSignature(): void
     {
@@ -109,13 +121,17 @@ class OcspResponse
 
         $responderCert = $basicResponse->getCertificates()[0];
         // get public key from responder certificate in order to verify signature on response
-        $publicKey = $responderCert->getPublicKey()->withHash($basicResponse->getSignatureAlgorithm());
+        $publicKey = $responderCert
+            ->getPublicKey()
+            ->withHash($basicResponse->getSignatureAlgorithm());
         // verify response data
         $encodedTbsResponseData = $basicResponse->getEncodedResponseData();
         $signature = $basicResponse->getSignature();
 
         if (!$publicKey->verify($encodedTbsResponseData, $signature)) {
-            throw new OcspVerifyFailedException("OCSP response signature is not valid");
+            throw new OcspVerifyFailedException(
+                "OCSP response signature is not valid"
+            );
         }
     }
 
@@ -123,7 +139,9 @@ class OcspResponse
     {
         $basicResponse = $this->getBasicResponse();
         if ($requestCertificateId != $basicResponse->getCertID()) {
-            throw new OcspVerifyFailedException("OCSP responded with certificate ID that differs from the requested ID");
+            throw new OcspVerifyFailedException(
+                "OCSP responded with certificate ID that differs from the requested ID"
+            );
         }
     }
 
@@ -131,12 +149,18 @@ class OcspResponse
     {
         // Must be one response
         if (count($basicResponse->getResponses()) != 1) {
-            throw new OcspVerifyFailedException("OCSP response must contain one response, received " . count($basicResponse->getResponses()) . " responses instead");
+            throw new OcspVerifyFailedException(
+                "OCSP response must contain one response, received " .
+                    count($basicResponse->getResponses()) .
+                    " responses instead"
+            );
         }
 
         // At least on cert must exist in responder
         if (count($basicResponse->getCertificates()) < 1) {
-            throw new OcspVerifyFailedException("OCSP response must contain the responder certificate, but non was provided");
+            throw new OcspVerifyFailedException(
+                "OCSP response must contain the responder certificate, but non was provided"
+            );
         }
     }
 }

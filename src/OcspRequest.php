@@ -32,7 +32,6 @@ use web_eid\ocsp_php\util\AsnUtil;
 
 class OcspRequest
 {
-
     private array $ocspRequest = [];
 
     public function __construct()
@@ -40,10 +39,10 @@ class OcspRequest
         AsnUtil::loadOIDs();
 
         $this->ocspRequest = [
-            'tbsRequest' => [
-                'version' => 'v1',
-                'requestList' => [],
-                'requestExtensions' => [],
+            "tbsRequest" => [
+                "version" => "v1",
+                "requestList" => [],
+                "requestExtensions" => [],
             ],
         ];
     }
@@ -51,19 +50,21 @@ class OcspRequest
     public function addCertificateId(array $certificateId): void
     {
         $request = [
-            'reqCert' => $certificateId
+            "reqCert" => $certificateId,
         ];
-        $this->ocspRequest['tbsRequest']['requestList'][] = $request;
+        $this->ocspRequest["tbsRequest"]["requestList"][] = $request;
     }
 
     public function addNonceExtension(string $nonce): void
     {
         $nonceExtension = [
-            'extnId' => AsnUtil::ID_PKIX_OCSP_NONCE,
-            'critical' => false,
-            'extnValue' => $nonce,
+            "extnId" => AsnUtil::ID_PKIX_OCSP_NONCE,
+            "critical" => false,
+            "extnValue" => $nonce,
         ];
-        $this->ocspRequest['tbsRequest']['requestExtensions'][] = $nonceExtension;
+        $this->ocspRequest["tbsRequest"][
+            "requestExtensions"
+        ][] = $nonceExtension;
     }
 
     /**
@@ -73,12 +74,12 @@ class OcspRequest
     {
         return current(
             array_filter(
-                $this->ocspRequest['tbsRequest']['requestExtensions'],
+                $this->ocspRequest["tbsRequest"]["requestExtensions"],
                 function ($extension) {
-                    return AsnUtil::ID_PKIX_OCSP_NONCE == $extension['extnId'];
+                    return AsnUtil::ID_PKIX_OCSP_NONCE == $extension["extnId"];
                 }
             )
-        )['extnValue'];
+        )["extnValue"];
     }
 
     public function getEncodeDer(): string

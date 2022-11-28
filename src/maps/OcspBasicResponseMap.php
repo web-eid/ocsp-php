@@ -41,112 +41,125 @@ use phpseclib3\File\ASN1\Maps\Name;
 abstract class OcspBasicResponseMap
 {
     public const MAP = [
-        'type' => ASN1::TYPE_SEQUENCE,
-        'children' => [
-            'tbsResponseData' => [
-                'type' => ASN1::TYPE_SEQUENCE,
-                'children' => [
-                    'version' => [
-                        'type' => ASN1::TYPE_INTEGER,
-                        'constant' => 0,
-                        'optional' => true,
-                        'explicit' => true,
-                        'mapping' => ['v1'],
-                        'default' => 'v1',
+        "type" => ASN1::TYPE_SEQUENCE,
+        "children" => [
+            "tbsResponseData" => [
+                "type" => ASN1::TYPE_SEQUENCE,
+                "children" => [
+                    "version" => [
+                        "type" => ASN1::TYPE_INTEGER,
+                        "constant" => 0,
+                        "optional" => true,
+                        "explicit" => true,
+                        "mapping" => ["v1"],
+                        "default" => "v1",
                     ],
-                    'responderID' => [
-                        'type' => ASN1::TYPE_CHOICE,
-                        'children' => [
-                            'byName' => [
-                                'constant' => 1,
-                                'explicit' => true,
-                            ] + Name::MAP,
-                            'byKey' => [
-                                'constant' => 2,
-                                'explicit' => true,
-                                'type' => ASN1::TYPE_OCTET_STRING,
+                    "responderID" => [
+                        "type" => ASN1::TYPE_CHOICE,
+                        "children" => [
+                            "byName" =>
+                                [
+                                    "constant" => 1,
+                                    "explicit" => true,
+                                ] + Name::MAP,
+                            "byKey" => [
+                                "constant" => 2,
+                                "explicit" => true,
+                                "type" => ASN1::TYPE_OCTET_STRING,
                             ],
                         ],
                     ],
-                    'producedAt' => ['type' => ASN1::TYPE_GENERALIZED_TIME],
-                    'responses' => [
-                        'type' => ASN1::TYPE_SEQUENCE,
-                        'min' => 0,
-                        'max' => -1,
-                        'children' => [
-                            'type' => ASN1::TYPE_SEQUENCE,
-                            'children' => [
-                                'certID' => [
-                                    'type' => ASN1::TYPE_SEQUENCE,
-                                    'children' => [
-                                        'hashAlgorithm' => AlgorithmIdentifier::MAP,
-                                        'issuerNameHash' => ['type' => ASN1::TYPE_OCTET_STRING],
-                                        'issuerKeyHash' => ['type' => ASN1::TYPE_OCTET_STRING],
-                                        'serialNumber' => CertificateSerialNumber::MAP,
+                    "producedAt" => ["type" => ASN1::TYPE_GENERALIZED_TIME],
+                    "responses" => [
+                        "type" => ASN1::TYPE_SEQUENCE,
+                        "min" => 0,
+                        "max" => -1,
+                        "children" => [
+                            "type" => ASN1::TYPE_SEQUENCE,
+                            "children" => [
+                                "certID" => [
+                                    "type" => ASN1::TYPE_SEQUENCE,
+                                    "children" => [
+                                        "hashAlgorithm" =>
+                                            AlgorithmIdentifier::MAP,
+                                        "issuerNameHash" => [
+                                            "type" => ASN1::TYPE_OCTET_STRING,
+                                        ],
+                                        "issuerKeyHash" => [
+                                            "type" => ASN1::TYPE_OCTET_STRING,
+                                        ],
+                                        "serialNumber" =>
+                                            CertificateSerialNumber::MAP,
                                     ],
                                 ],
-                                'certStatus' => [
-                                    'type' => ASN1::TYPE_CHOICE,
-                                    'children' => [
-                                        'good' => [
-                                            'constant' => 0,
-                                            'implicit' => true,
-                                            'type' => ASN1::TYPE_NULL,
+                                "certStatus" => [
+                                    "type" => ASN1::TYPE_CHOICE,
+                                    "children" => [
+                                        "good" => [
+                                            "constant" => 0,
+                                            "implicit" => true,
+                                            "type" => ASN1::TYPE_NULL,
                                         ],
-                                        'revoked' => [
-                                            'constant' => 1,
-                                            'implicit' => true,
-                                            'type' => ASN1::TYPE_SEQUENCE,
-                                            'children' => [
-                                                'revokedTime' => [
-                                                    'type' => ASN1::TYPE_GENERALIZED_TIME,
+                                        "revoked" => [
+                                            "constant" => 1,
+                                            "implicit" => true,
+                                            "type" => ASN1::TYPE_SEQUENCE,
+                                            "children" => [
+                                                "revokedTime" => [
+                                                    "type" =>
+                                                        ASN1::TYPE_GENERALIZED_TIME,
                                                 ],
-                                                'revokedReason' => [
-                                                    'constant' => 0,
-                                                    'explicit' => true,
-                                                    'optional' => true,
-                                                ] + CRLReason::MAP,
+                                                "revokedReason" =>
+                                                    [
+                                                        "constant" => 0,
+                                                        "explicit" => true,
+                                                        "optional" => true,
+                                                    ] + CRLReason::MAP,
                                             ],
                                         ],
-                                        'unknown' => [
-                                            'constant' => 2,
-                                            'implicit' => true,
-                                            'type' => ASN1::TYPE_NULL,
+                                        "unknown" => [
+                                            "constant" => 2,
+                                            "implicit" => true,
+                                            "type" => ASN1::TYPE_NULL,
                                         ],
                                     ],
                                 ],
-                                'thisUpdate' => ['type' => ASN1::TYPE_GENERALIZED_TIME],
-                                'nextUpdate' => [
-                                    'type' => ASN1::TYPE_GENERALIZED_TIME,
-                                    'constant' => 0,
-                                    'explicit' => true,
-                                    'optional' => true,
+                                "thisUpdate" => [
+                                    "type" => ASN1::TYPE_GENERALIZED_TIME,
                                 ],
-                                'singleExtensions' => [
-                                    'constant' => 1,
-                                    'explicit' => true,
-                                    'optional' => true,
-                                ] + Extensions::MAP,
+                                "nextUpdate" => [
+                                    "type" => ASN1::TYPE_GENERALIZED_TIME,
+                                    "constant" => 0,
+                                    "explicit" => true,
+                                    "optional" => true,
+                                ],
+                                "singleExtensions" =>
+                                    [
+                                        "constant" => 1,
+                                        "explicit" => true,
+                                        "optional" => true,
+                                    ] + Extensions::MAP,
                             ],
                         ],
                     ],
-                    'responseExtensions' => [
-                        'constant' => 1,
-                        'explicit' => true,
-                        'optional' => true,
-                    ] + Extensions::MAP,
+                    "responseExtensions" =>
+                        [
+                            "constant" => 1,
+                            "explicit" => true,
+                            "optional" => true,
+                        ] + Extensions::MAP,
                 ],
             ],
-            'signatureAlgorithm' => AlgorithmIdentifier::MAP,
-            'signature' => ['type' => ASN1::TYPE_BIT_STRING],
-            'certs' => [
-                'constant' => 0,
-                'explicit' => true,
-                'optional' => true,
-                'type' => ASN1::TYPE_SEQUENCE,
-                'min' => 0,
-                'max' => -1,
-                'children' => Certificate::MAP,
+            "signatureAlgorithm" => AlgorithmIdentifier::MAP,
+            "signature" => ["type" => ASN1::TYPE_BIT_STRING],
+            "certs" => [
+                "constant" => 0,
+                "explicit" => true,
+                "optional" => true,
+                "type" => ASN1::TYPE_SEQUENCE,
+                "min" => 0,
+                "max" => -1,
+                "children" => Certificate::MAP,
             ],
         ],
     ];
