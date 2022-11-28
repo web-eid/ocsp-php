@@ -45,7 +45,7 @@ class OcspBasicResponse
 
     public function getResponses(): array
     {
-        return $this->ocspBasicResponse['tbsResponseData']['responses'];
+        return $this->ocspBasicResponse["tbsResponseData"]["responses"];
     }
 
     /**
@@ -54,8 +54,8 @@ class OcspBasicResponse
     public function getCertificates(): array
     {
         $certificatesArr = [];
-        if (isset($this->ocspBasicResponse['certs'])) {
-            foreach ($this->ocspBasicResponse['certs'] as $cert) {
+        if (isset($this->ocspBasicResponse["certs"])) {
+            foreach ($this->ocspBasicResponse["certs"] as $cert) {
                 $x509 = new X509();
                 /*
 				We need to DER encode each responder certificate array as there exists some
@@ -74,24 +74,26 @@ class OcspBasicResponse
 
     public function getSignature(): string
     {
-        $signature = $this->ocspBasicResponse['signature'];
-        return pack('c*', ...array_slice(unpack('c*', $signature), 1));
+        $signature = $this->ocspBasicResponse["signature"];
+        return pack("c*", ...array_slice(unpack("c*", $signature), 1));
     }
 
     public function getProducedAt(): DateTime
     {
-        return new DateTime($this->ocspBasicResponse['tbsResponseData']['producedAt']);
+        return new DateTime(
+            $this->ocspBasicResponse["tbsResponseData"]["producedAt"]
+        );
     }
 
     public function getThisUpdate(): DateTime
     {
-        return new DateTime($this->getResponses()[0]['thisUpdate']);
+        return new DateTime($this->getResponses()[0]["thisUpdate"]);
     }
 
     public function getNextUpdate(): ?DateTime
     {
-        if (isset($this->getResponses()[0]['nextUpdate'])) {
-            return new DateTime($this->getResponses()[0]['nextUpdate']);
+        if (isset($this->getResponses()[0]["nextUpdate"])) {
+            return new DateTime($this->getResponses()[0]["nextUpdate"]);
         }
         return null;
     }
@@ -101,29 +103,34 @@ class OcspBasicResponse
      */
     public function getSignatureAlgorithm(): string
     {
-        $algorithm = strtolower($this->ocspBasicResponse['signatureAlgorithm']['algorithm']);
+        $algorithm = strtolower(
+            $this->ocspBasicResponse["signatureAlgorithm"]["algorithm"]
+        );
 
-        if (false !== ($pos = strpos($algorithm, 'sha3-'))) {
+        if (false !== ($pos = strpos($algorithm, "sha3-"))) {
             return substr($algorithm, $pos, 8);
         }
-        if (false !== ($pos = strpos($algorithm, 'sha'))) {
+        if (false !== ($pos = strpos($algorithm, "sha"))) {
             return substr($algorithm, $pos, 6);
         }
 
-        throw new OcspCertificateException("Signature algorithm " . $algorithm . " not implemented");
+        throw new OcspCertificateException(
+            "Signature algorithm " . $algorithm . " not implemented"
+        );
     }
 
     public function getNonceExtension(): ?string
     {
         $filter = array_filter(
-            $this->ocspBasicResponse['tbsResponseData']['responseExtensions'],
+            $this->ocspBasicResponse["tbsResponseData"]["responseExtensions"],
             function ($extension) {
-                return AsnUtil::ID_PKIX_OCSP_NONCE == ASN1::getOID($extension['extnId']);
+                return AsnUtil::ID_PKIX_OCSP_NONCE ==
+                    ASN1::getOID($extension["extnId"]);
             }
         );
 
-        if (isset($filter[0]['extnValue'])) {
-            return $filter[0]['extnValue'];
+        if (isset($filter[0]["extnValue"])) {
+            return $filter[0]["extnValue"];
         }
 
         return null;
@@ -133,12 +140,19 @@ class OcspBasicResponse
     {
         $certStatusResponse = $this->getResponses()[0];
         // Translate algorithm name to OID for correct equality check
-        $certStatusResponse['certID']['hashAlgorithm']['algorithm'] = ASN1::getOID($certStatusResponse['certID']['hashAlgorithm']['algorithm']);
-        return $certStatusResponse['certID'];
+        $certStatusResponse["certID"]["hashAlgorithm"][
+            "algorithm"
+        ] = ASN1::getOID(
+            $certStatusResponse["certID"]["hashAlgorithm"]["algorithm"]
+        );
+        return $certStatusResponse["certID"];
     }
 
     public function getEncodedResponseData(): string
     {
-        return ASN1::encodeDER($this->ocspBasicResponse['tbsResponseData'],  OcspBasicResponseMap::MAP['children']['tbsResponseData']);
+        return ASN1::encodeDER(
+            $this->ocspBasicResponse["tbsResponseData"],
+            OcspBasicResponseMap::MAP["children"]["tbsResponseData"]
+        );
     }
 }

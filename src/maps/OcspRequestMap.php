@@ -39,73 +39,81 @@ use phpseclib3\File\ASN1\Maps\GeneralName;
  */
 abstract class OcspRequestMap
 {
-
     public const MAP = [
-        'type' => ASN1::TYPE_SEQUENCE,
-        'children' => [
-            'tbsRequest' => [
-                'type' => ASN1::TYPE_SEQUENCE,
-                'children' => [
-                    'version' => [
-                        'constant' => 0,
-                        'explicit' => true,
-                        'optional' => true,
-                        'mapping' => [0 => 'v1'],
-                        'default' => 'v1',
-                        'type' => ASN1::TYPE_INTEGER,
+        "type" => ASN1::TYPE_SEQUENCE,
+        "children" => [
+            "tbsRequest" => [
+                "type" => ASN1::TYPE_SEQUENCE,
+                "children" => [
+                    "version" => [
+                        "constant" => 0,
+                        "explicit" => true,
+                        "optional" => true,
+                        "mapping" => [0 => "v1"],
+                        "default" => "v1",
+                        "type" => ASN1::TYPE_INTEGER,
                     ],
-                    'requestList' => [
-                        'type' => ASN1::TYPE_SEQUENCE,
-                        'min' => 0,
-                        'max' => -1,
-                        'children' => [
-                            'type' => ASN1::TYPE_SEQUENCE,
-                            'children' => [
-                                'reqCert' => [
-                                    'type' => ASN1::TYPE_SEQUENCE,
-                                    'children' => [
-                                        'hashAlgorithm' => AlgorithmIdentifier::MAP,
-                                        'issuerNameHash' => ['type' => ASN1::TYPE_OCTET_STRING],
-                                        'issuerKeyHash' => ['type' => ASN1::TYPE_OCTET_STRING],
-                                        'serialNumber' => CertificateSerialNumber::MAP,
+                    "requestList" => [
+                        "type" => ASN1::TYPE_SEQUENCE,
+                        "min" => 0,
+                        "max" => -1,
+                        "children" => [
+                            "type" => ASN1::TYPE_SEQUENCE,
+                            "children" => [
+                                "reqCert" => [
+                                    "type" => ASN1::TYPE_SEQUENCE,
+                                    "children" => [
+                                        "hashAlgorithm" =>
+                                            AlgorithmIdentifier::MAP,
+                                        "issuerNameHash" => [
+                                            "type" => ASN1::TYPE_OCTET_STRING,
+                                        ],
+                                        "issuerKeyHash" => [
+                                            "type" => ASN1::TYPE_OCTET_STRING,
+                                        ],
+                                        "serialNumber" =>
+                                            CertificateSerialNumber::MAP,
                                     ],
                                 ],
-                                'singleRequestExtensions' => [
-                                    'constant' => 0,
-                                    'explicit' => true,
-                                    'optional' => true,
-                                ] + Extensions::MAP,
+                                "singleRequestExtensions" =>
+                                    [
+                                        "constant" => 0,
+                                        "explicit" => true,
+                                        "optional" => true,
+                                    ] + Extensions::MAP,
                             ],
                         ],
                     ],
-                    'requestExtensions' => [
-                        'constant' => 2,
-                        'explicit' => true,
-                        'optional' => true,
-                    ] + Extensions::MAP,
-                    'requestorName' => [
-                        'constant' => 1,
-                        'optional' => true,
-                        'explicit' => true,
-                    ] + GeneralName::MAP,
+                    "requestExtensions" =>
+                        [
+                            "constant" => 2,
+                            "explicit" => true,
+                            "optional" => true,
+                        ] + Extensions::MAP,
+                    "requestorName" =>
+                        [
+                            "constant" => 1,
+                            "optional" => true,
+                            "explicit" => true,
+                        ] + GeneralName::MAP,
                 ],
             ],
-            'optionalSignature' => [
-                'constant' => 0,
-                'explicit' => true,
-                'optional' => true,
-                'type' => ASN1::TYPE_SEQUENCE,
-                'children' => [
-                    'signatureAlgorithm' => AlgorithmIdentifier::MAP,
-                    'signature' => ['type' => ASN1::TYPE_BIT_STRING],
-                    'certs' => [
-                        'constant' => 0,
-                        'explicit' => true,
-                        'optional' => true,
-                        'type' => ASN1::TYPE_SEQUENCE,
-                        'min' => 0,
-                        'max' => -1,
-                        'children' => Certificate::MAP,
+            "optionalSignature" => [
+                "constant" => 0,
+                "explicit" => true,
+                "optional" => true,
+                "type" => ASN1::TYPE_SEQUENCE,
+                "children" => [
+                    "signatureAlgorithm" => AlgorithmIdentifier::MAP,
+                    "signature" => ["type" => ASN1::TYPE_BIT_STRING],
+                    "certs" => [
+                        "constant" => 0,
+                        "explicit" => true,
+                        "optional" => true,
+                        "type" => ASN1::TYPE_SEQUENCE,
+                        "min" => 0,
+                        "max" => -1,
+                        "children" => Certificate::MAP,
                     ],
                 ],
             ],

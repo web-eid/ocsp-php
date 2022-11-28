@@ -32,7 +32,6 @@ use web_eid\ocsp_php\exceptions\OcspCertificateException;
 
 class CertificateLoader
 {
-
     private ?X509 $certificate = null;
 
     /**
@@ -46,13 +45,18 @@ class CertificateLoader
         try {
             $fileContent = file_get_contents($pathToFile);
         } catch (Exception $e) {
-            throw new OcspCertificateException("Certificate file not found: " . $pathToFile);
+            throw new OcspCertificateException(
+                "Certificate file not found: " . $pathToFile
+            );
         }
 
         $certificate = new X509();
         $loaded = $certificate->loadX509($fileContent);
         if (!$loaded) {
-            throw new OcspCertificateException("Certificate decoding from Base64 or parsing failed for " . $pathToFile);
+            throw new OcspCertificateException(
+                "Certificate decoding from Base64 or parsing failed for " .
+                    $pathToFile
+            );
         }
         $this->certificate = $certificate;
         return $this;
@@ -69,7 +73,9 @@ class CertificateLoader
         $certificate = new X509();
         $loaded = $certificate->loadX509($certString);
         if (!$loaded) {
-            throw new OcspCertificateException("Certificate decoding from Base64 or parsing failed");
+            throw new OcspCertificateException(
+                "Certificate decoding from Base64 or parsing failed"
+            );
         }
         $this->certificate = $certificate;
         return $this;
