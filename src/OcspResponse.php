@@ -74,7 +74,7 @@ class OcspResponse
 
         if (!$this->ocspResponse["responseBytes"]["response"]) {
             throw new UnexpectedValueException(
-                "Could not decode OcspResponse->responseBytes->responseType"
+                "Could not decode OcspResponse->responseBytes->response"
             );
         }
 
@@ -159,7 +159,7 @@ class OcspResponse
         // At least on cert must exist in responder
         if (count($basicResponse->getCertificates()) < 1) {
             throw new OcspVerifyFailedException(
-                "OCSP response must contain the responder certificate, but non was provided"
+                "OCSP response must contain the responder certificate, but none was provided"
             );
         }
     }
