@@ -141,7 +141,7 @@ class OcspResponseTest extends TestCase
     public function testWhenMissingResponseThrows(): void
     {
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Could not decode OcspResponse->responseBytes->responseType');
+        $this->expectExceptionMessage('Could not decode OcspResponse->responseBytes->response');
 
         $response = new OcspResponse(self::getOcspResponseBytesFromResources());
 
@@ -158,7 +158,7 @@ class OcspResponseTest extends TestCase
     public function testWhenNoCertificatesInResponseThrows(): void
     {
         $this->expectException(OcspVerifyFailedException::class);
-        $this->expectExceptionMessage('OCSP response must contain the responder certificate, but non was provided');
+        $this->expectExceptionMessage('OCSP response must contain the responder certificate, but none was provided');
 
         $response = new OcspResponse(self::getOcspResponseBytesFromResources());
 

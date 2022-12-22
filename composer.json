@@ -1,5 +1,5 @@
 {
-    "name": "web_eid/ocsp_php",
+    "name": "web-eid/ocsp-php",
     "description": "OCSP library for PHP",
     "license": "MIT",
     "type": "library",
