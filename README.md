@@ -12,18 +12,10 @@ A PHP web application that uses Composer to manage packages is needed for runnin
 
 ## Add the library to your project
 
-Add the following lines to composer.json to include the ocsp-php library in your project:
+Install using Composer:
 
-```json
-"repositories": [
-{
-    "type": "vcs",
-    "url": "https://github.com/web-eid/ocsp-php"
-}
-],
-"require": {
-    "web_eid/ocsp_php": "dev-main"
-},
+```sh
+composer require web-eid/ocsp-php
 ```
 
 ## Loading the certificates
