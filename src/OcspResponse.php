@@ -138,7 +138,11 @@ class OcspResponse
     public function validateCertificateId(array $requestCertificateId): void
     {
         $basicResponse = $this->getBasicResponse();
-        if ($requestCertificateId != $basicResponse->getCertID()) {
+
+        $getCertID = $basicResponse->getCertID();
+        unset($getCertID['hashAlgorithm']['parameters']);
+
+        if ($requestCertificateId != $getCertID) {
             throw new OcspVerifyFailedException(
                 "OCSP responded with certificate ID that differs from the requested ID"
             );
