@@ -103,9 +103,14 @@ class OcspBasicResponse
      */
     public function getSignatureAlgorithm(): string
     {
-        $algorithm = strtolower(
-            $this->ocspBasicResponse["signatureAlgorithm"]["algorithm"]
-        );
+        $algorithm = $this->ocspBasicResponse["signatureAlgorithm"]["algorithm"];
+
+        if (substr_count($algorithm, '.') > 2) {
+            $decode = $mapping = ['type' => ASN1::TYPE_OBJECT_IDENTIFIER, 'content' => $algorithm];
+            $algorithm = ASN1::asn1map($decode, $mapping);
+        }
+
+        $algorithm = strtolower($algorithm);
 
         if (false !== ($pos = strpos($algorithm, "sha3-"))) {
             return substr($algorithm, $pos, 8);
