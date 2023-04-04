@@ -65,7 +65,8 @@ class Ocsp
      */
     public function generateCertificateId(
         X509 $certificate,
-        X509 $issuerCertificate
+        X509 $issuerCertificate,
+        $algo = "sha1"
     ): array {
         AsnUtil::loadOIDs();
 
@@ -109,7 +110,7 @@ class Ocsp
             "subject"
         ];
         $issuerEncoded = ASN1::encodeDER($issuer, Name::MAP);
-        $certificateId["issuerNameHash"] = hash("sha1", $issuerEncoded, true);
+        $certificateId["issuerNameHash"] = hash($algo, $issuerEncoded, true);
 
         // issuer public key
         if (
@@ -129,12 +130,26 @@ class Ocsp
             "subjectPublicKeyInfo"
         ]["subjectPublicKey"];
         $certificateId["issuerKeyHash"] = hash(
-            "sha1",
+            $algo,
             AsnUtil::extractKeyData($publicKey),
             true
         );
 
-        $certificateId["hashAlgorithm"]["algorithm"] = Asn1::getOID("id-sha1");
+        $certificateId["hashAlgorithm"]["algorithm"] =
+            match ('id-' . $algo) {
+                    'md2' => '1.2.840.113549.2.2',
+                    'md4' => '1.2.840.113549.2.4',
+                    'md5' => '1.2.840.113549.2.5',
+                    'id-sha1' => '1.3.14.3.2.26',
+                    'id-sha256' => '2.16.840.1.101.3.4.2.1',
+                    'id-sha384' => '2.16.840.1.101.3.4.2.2',
+                    'id-sha512' => '2.16.840.1.101.3.4.2.3',
+                    'id-sha224' => '2.16.840.1.101.3.4.2.4',
+                    'id-sha512/224' => '2.16.840.1.101.3.4.2.5',
+                    'id-sha512/256' => '2.16.840.1.101.3.4.2.6',
+                    'id-mgf1' => '1.2.840.113549.1.1.8'
+            };
+            //Asn1::getOID("id-" . strtoupper(str_replace('_', '', $algo)));
 
         return $certificateId;
     }
