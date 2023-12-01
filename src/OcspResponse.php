@@ -41,7 +41,7 @@ class OcspResponse
     public function __construct(string $encodedBER)
     {
         $decoded = ASN1::decodeBER($encodedBER);
-        if (!$decoded[0]) {
+        if (!is_array($decoded)) {
             throw new OcspResponseDecodeException();
         }
 
