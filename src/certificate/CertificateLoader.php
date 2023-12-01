@@ -71,7 +71,11 @@ class CertificateLoader
     public function fromString(string $certString)
     {
         $certificate = new X509();
-        $loaded = $certificate->loadX509($certString);
+        $loaded = false;
+        try {
+            $loaded = $certificate->loadX509($certString);
+        } catch (Exception $e) {
+        }
         if (!$loaded) {
             throw new OcspCertificateException(
                 "Certificate decoding from Base64 or parsing failed"
