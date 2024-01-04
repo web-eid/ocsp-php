@@ -60,7 +60,7 @@ class OcspRequest
         $nonceExtension = [
             "extnId" => AsnUtil::ID_PKIX_OCSP_NONCE,
             "critical" => false,
-            "extnValue" => $nonce,
+            "extnValue" => ASN1::encodeDER($nonce, ['type' => ASN1::TYPE_OCTET_STRING]),
         ];
         $this->ocspRequest["tbsRequest"][
             "requestExtensions"
@@ -72,7 +72,7 @@ class OcspRequest
      */
     public function getNonceExtension(): string
     {
-        return current(
+        $nonce = current(
             array_filter(
                 $this->ocspRequest["tbsRequest"]["requestExtensions"],
                 function ($extension) {
@@ -80,6 +80,8 @@ class OcspRequest
                 }
             )
         )["extnValue"];
+        $decoded = ASN1::decodeBER($nonce);
+        return ASN1::asn1map($decoded[0], ['type' => ASN1::TYPE_OCTET_STRING]);
     }
 
     public function getEncodeDer(): string

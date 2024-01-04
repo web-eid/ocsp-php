@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace web_eid\ocsp_php;
 
+use phpseclib3\File\ASN1;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use web_eid\ocsp_php\util\AsnUtil;
@@ -49,7 +50,7 @@ class OcspRequestTest extends TestCase
         return [
             'extnId' => AsnUtil::ID_PKIX_OCSP_NONCE,
             'critical' => false,
-            'extnValue' => "nonce",
+            'extnValue' => ASN1::encodeDER("nonce", ['type' => ASN1::TYPE_OCTET_STRING]),
         ];
     }
 
