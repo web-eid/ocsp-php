@@ -42,9 +42,12 @@ class CertificateLoader
      */
     public function fromFile(string $pathToFile)
     {
+        $fileContent = false;
         try {
-            $fileContent = file_get_contents($pathToFile);
+            $fileContent = @file_get_contents($pathToFile);
         } catch (Exception $e) {
+        }
+        if ($fileContent === false) {
             throw new OcspCertificateException(
                 "Certificate file not found: " . $pathToFile
             );
