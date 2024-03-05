@@ -52,7 +52,7 @@ class CertificateLoaderTest extends TestCase
     public function testWhenCertificateFileDoNotExistThrows(): void
     {
         $this->expectException(OcspCertificateException::class);
-        $this->expectExceptionMessage('Certificate file not found: '.__DIR__.'/../_resources/somecert.crt');
+        $this->expectExceptionMessage('Certificate file not found or not readable: '.__DIR__.'/../_resources/somecert.crt');
 
         (new CertificateLoader)->fromFile(__DIR__.'/../_resources/somecert.crt');
 
