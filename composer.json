@@ -27,7 +27,7 @@
         }
     },
     "require": {
-        "phpseclib/phpseclib": "3.0.37"
+        "phpseclib/phpseclib": "3.0.*"
     },
     "scripts": {
         "fix-php": [
