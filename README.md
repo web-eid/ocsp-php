@@ -168,7 +168,7 @@ tested against.
 Although our library is designed to work with any minor version of `phpseclib`
 within the specified range, the `composer.lock` file ensures that integrators
 are aware of the specific version we consider stable and secure. The provided
-`composer.lock` is intended to be used as a reference, not a strict
+`composer.lock` is intended to be used as a reference, not as a strict
 requirement.
 
 # Code formatting
