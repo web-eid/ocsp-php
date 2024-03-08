@@ -34,7 +34,7 @@
             "prettier src/**/* --write",
             "prettier src/* --write"
         ],
-        "test": "phpunit --no-coverage",
+        "test": "phpunit --no-coverage --display-warnings",
         "test-coverage": [
             "@putenv XDEBUG_MODE=coverage",
             "phpunit --coverage-html coverage"

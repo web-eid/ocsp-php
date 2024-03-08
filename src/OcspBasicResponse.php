@@ -121,24 +121,7 @@ class OcspBasicResponse
 
     public function getNonceExtension(): ?string
     {
-        $filter = array_filter(
-            $this->ocspBasicResponse["tbsResponseData"]["responseExtensions"],
-            function ($extension) {
-                return AsnUtil::ID_PKIX_OCSP_NONCE ==
-                    ASN1::getOID($extension["extnId"]);
-            }
-        );
-
-        if (isset($filter[0]["extnValue"])) {
-            $decoded = ASN1::decodeBER($filter[0]["extnValue"]);
-            if(is_array($decoded)) {
-                return ASN1::asn1map($decoded[0], ['type' => ASN1::TYPE_OCTET_STRING]);
-            } else {
-                return $filter[0]["extnValue"];
-            }
-        }
-
-        return null;
+        return AsnUtil::decodeNonceExtension($this->ocspBasicResponse["tbsResponseData"]["responseExtensions"]);
     }
 
     public function getCertID(): array
