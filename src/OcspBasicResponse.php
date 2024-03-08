@@ -58,11 +58,11 @@ class OcspBasicResponse
             foreach ($this->ocspBasicResponse["certs"] as $cert) {
                 $x509 = new X509();
                 /*
-				We need to DER encode each responder certificate array as there exists some
-				more loading in X509->loadX509 method, which is not executed when loading just basic array.
-				For example without this the publicKey would not be in PEM format and X509->getPublicKey()
-				will throw error. It also maps out the extensions from BIT STRING
-				*/
+                We need to DER encode each responder certificate array as there exists some
+                more loading in X509->loadX509 method, which is not executed when loading just basic array.
+                For example without this the publicKey would not be in PEM format and X509->getPublicKey()
+                will throw error. It also maps out the extensions from BIT STRING
+                */
                 $x509->loadX509(ASN1::encodeDER($cert, Certificate::MAP));
                 $certificatesArr[] = $x509;
             }
@@ -130,7 +130,12 @@ class OcspBasicResponse
         );
 
         if (isset($filter[0]["extnValue"])) {
-            return $filter[0]["extnValue"];
+            $decoded = ASN1::decodeBER($filter[0]["extnValue"]);
+            if(is_array($decoded)) {
+                return ASN1::asn1map($decoded[0], ['type' => ASN1::TYPE_OCTET_STRING]);
+            } else {
+                return $filter[0]["extnValue"];
+            }
         }
 
         return null;
