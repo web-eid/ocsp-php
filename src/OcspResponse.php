@@ -40,15 +40,12 @@ class OcspResponse
 
     public function __construct(string $encodedBER)
     {
-        $decoded = ASN1::decodeBER($encodedBER);
-        if (!is_array($decoded)) {
-            throw new OcspResponseDecodeException();
-        }
+        $decoded = self::getDecoded($encodedBER);
 
         $this->ocspResponse = ASN1::asn1map($decoded[0], OcspResponseMap::MAP, [
             "response" => function ($encoded) {
                 return ASN1::asn1map(
-                    ASN1::decodeBER($encoded)[0],
+                    self::getDecoded($encoded)[0],
                     OcspBasicResponseMap::MAP
                 );
             },
@@ -162,5 +159,13 @@ class OcspResponse
                 "OCSP response must contain the responder certificate, but none was provided"
             );
         }
+    }
+
+    private static function getDecoded(string $encodedBER) {
+        $decoded = ASN1::decodeBER($encodedBER);
+        if (!is_array($decoded)) {
+            throw new OcspResponseDecodeException();
+        }
+        return $decoded;
     }
 }
