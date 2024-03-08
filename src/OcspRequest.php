@@ -72,16 +72,8 @@ class OcspRequest
      */
     public function getNonceExtension(): string
     {
-        $nonce = current(
-            array_filter(
-                $this->ocspRequest["tbsRequest"]["requestExtensions"],
-                function ($extension) {
-                    return AsnUtil::ID_PKIX_OCSP_NONCE == $extension["extnId"];
-                }
-            )
-        )["extnValue"];
-        $decoded = ASN1::decodeBER($nonce);
-        return ASN1::asn1map($decoded[0], ['type' => ASN1::TYPE_OCTET_STRING]);
+        // TODO: the ?? '' is here only for v1.0 API compatibility. Remove this in version 1.2 and change the return type to ?string.
+        return AsnUtil::decodeNonceExtension($this->ocspRequest["tbsRequest"]["requestExtensions"]) ?? '';
     }
 
     public function getEncodeDer(): string
