@@ -31,6 +31,7 @@ use phpseclib3\File\ASN1\Maps\Name;
 use phpseclib3\File\X509;
 use web_eid\ocsp_php\exceptions\OcspCertificateException;
 use web_eid\ocsp_php\util\AsnUtil;
+use web_eid\ocsp_php\util\HashAlgorithm;
 
 class Ocsp
 {
@@ -58,14 +59,16 @@ class Ocsp
     /**
      * Generates certificate ID with subject and issuer certificates
      *
-     * @param X509 certificate - subject certificate
-     * @param X509 issuerCertificate - issuer certificate
+     * @param X509 $certificate - subject certificate
+     * @param X509 $issuerCertificate - issuer certificate
+     * @param HashAlgorithm $hashAlgorithm - The hash algorithm to use for the issuer name and key hashes
      * @return array
      * @throws OcspCertificateException when the subject or issuer certificates don't have required data
      */
     public function generateCertificateId(
         X509 $certificate,
-        X509 $issuerCertificate
+        X509 $issuerCertificate,
+        HashAlgorithm $hashAlgorithm = HashAlgorithm::SHA1
     ): array {
         AsnUtil::loadOIDs();
 
@@ -109,7 +112,7 @@ class Ocsp
             "subject"
         ];
         $issuerEncoded = ASN1::encodeDER($issuer, Name::MAP);
-        $certificateId["issuerNameHash"] = hash("sha1", $issuerEncoded, true);
+        $certificateId["issuerNameHash"] = hash($hashAlgorithm->value, $issuerEncoded, true);
 
         // issuer public key
         if (
@@ -129,12 +132,12 @@ class Ocsp
             "subjectPublicKeyInfo"
         ]["subjectPublicKey"];
         $certificateId["issuerKeyHash"] = hash(
-            "sha1",
+            $hashAlgorithm->value,
             AsnUtil::extractKeyData($publicKey),
             true
         );
 
-        $certificateId["hashAlgorithm"]["algorithm"] = Asn1::getOID("id-sha1");
+        $certificateId["hashAlgorithm"]["algorithm"] = Asn1::getOID("id-" . $hashAlgorithm->value);
 
         return $certificateId;
     }

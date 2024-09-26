@@ -38,6 +38,7 @@ class AsnUtil
         ASN1::loadOIDs([
             "id-pkix-ocsp-nonce" => self::ID_PKIX_OCSP_NONCE,
             "id-sha1" => "1.3.14.3.2.26",
+            "id-sha256" => "2.16.840.1.101.3.4.2.1",
             "sha256WithRSAEncryption" => "1.2.840.113549.1.1.11",
             "qcStatements(3)" => "1.3.6.1.5.5.7.1.3",
             "street" => "2.5.4.9",
