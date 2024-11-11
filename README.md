@@ -1,5 +1,8 @@
 # ocsp-php
 
+**NB! Please note that the ocsp-php code was moved to web-eid-authtoken-validation-php repository.<br>
+We won't be accepting pull requests or responding to issues in this repository anymore. We are happy to accept your proposals in the web-eid-authtoken-validation-php repository: https://github.com/web-eid/web-eid-authtoken-validation-php.**
+
 ocsp-php is a library for PHP for checking if certificates are revoked, by using Online Certificate Status Protocol (OCSP).
 
 This library does not include any HTTP client, you can use cURL for example.
